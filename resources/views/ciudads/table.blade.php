@@ -10,10 +10,10 @@
             <tbody>
             @foreach($ciudad as $ciu)
                 <tr>
-                    <td>{{ $ciu->ciu_descripcion }}</td> //filas con columnas 
-                    <td>{{ $value->ciu_descripcion }}</td> //filas con columnas 
+                    <td>{{ $ciu->ciu_descripcion }}</td>
+                    <td>{{ $value->ciu_descripcion }}</td> 
 
-                    {{-- <td  style="width: 120px">
+                    <td  style="width: 120px">
                         {!! Form::open(['route' => ['ciudads.delete', $ciudad->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
                             <a href="{{ route('ciudads.get', [$ciudad->id]) }}"
@@ -27,7 +27,7 @@
                             {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
                         </div>
                         {!! Form::close() !!}
-                    </td> --}}
+                    </td>
                 </tr>
             @endforeach
             </tbody>
