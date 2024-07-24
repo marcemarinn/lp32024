@@ -13,3 +13,10 @@
         <p>Ciudades</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('entidad_emisora.index') }}" class="nav-link {{ Request::is('entidad_emisora.index') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-city"></i>       
+        <p>Entidad Emisora</p>
+    </a>
+</li>

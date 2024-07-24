@@ -25,3 +25,9 @@ Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'
 
 Route::resource('ciudades', App\Http\Controllers\CiudadController::class);
 
+Route::resource('entidad_emisora', App\Http\Controllers\EntidadEmisoraController::class);
+
+Route::resource('clientes', App\Http\Controllers\ClienteController::class);
+
+
+
