@@ -16,7 +16,15 @@
 
 <li class="nav-item">
     <a href="{{ route('entidad_emisora.index') }}" class="nav-link {{ Request::is('entidad_emisora.index') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-city"></i>       
+        <i class="nav-icon fas fa-building"></i>       
         <p>Entidad Emisora</p>
+    </a>
+</li>
+
+
+<li class="nav-item">
+    <a href="{{ route('clientes.index') }}" class="nav-link {{ Request::is('clientes.index') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-user"></i>       
+        <p>Clientes</p>
     </a>
 </li>
