@@ -6,8 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1>
-                        Edit Entidad Emisora
-                    </h1>
+                        Editar Entidad
                 </div>
             </div>
         </div>

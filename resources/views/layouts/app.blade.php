@@ -11,10 +11,31 @@
 
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
+    
+
+    <!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
     @stack('third_party_stylesheets')
 
     @stack('page_css')
 </head>
+
+<script>
+    @if(Session::has('flash_notification.message'))
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000",
+        }
+        toastr["{{ Session::get('flash_notification.level') }}"]("{{ Session::get('flash_notification.message') }}");
+    @endif
+</script>
+
 
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">

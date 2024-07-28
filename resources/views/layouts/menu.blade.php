@@ -6,6 +6,13 @@
     </a>
 </li>
 
+<li class="nav-item">
+    <a href="{{ route('departamento.index') }}" class="nav-link {{ Request::is('departamento.index') ? 'active' : '' }}">
+    <i class="nav-icon fas fa-city"></i>
+    <p>Departamentos</p>
+    </a>
+</li>
+
 <!-- need to remove -->
 <li class="nav-item">
     <a href="{{ route('ciudades.index') }}" class="nav-link {{ Request::is('ciudades.index') ? 'active' : '' }}">

@@ -6,12 +6,13 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>
-                    @lang('Detalles')
+                    @lang('models/departamentos.singular') @lang('crud.detail')
+                    </h1>
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-default float-right"
-                       href="{{ route('entidad_emisora.index') }}">
-
+                       href="{{ route('departamentos.index') }}">
+                                                    @lang('crud.back')
                                             </a>
                 </div>
             </div>
@@ -22,10 +23,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-
-                    @include('entidad_emisoras.show_fields')
-                    <a href="{{ route('clientes.index') }}" class="btn btn-default">Volver</a>
-
+                    @include('departamentos.show_fields')
                 </div>
             </div>
         </div>

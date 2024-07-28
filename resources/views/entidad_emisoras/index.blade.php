@@ -10,7 +10,7 @@
                 <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
                        href="{{ route('entidad_emisora.create') }}">
-                        Add New
+                       <i class= "fa fa-plus-primary ">Agregar nueva Entidad</i>
                     </a>
                 </div>
             </div>

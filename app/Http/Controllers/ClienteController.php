@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Flash;
+
 
 
 
@@ -30,23 +32,14 @@ class ClienteController extends Controller
 
     public function create()
     {
-        ## Cargar ciudad y departamento en blade create utilizando pluck
         $ciudades = DB::table('ciudad')->pluck('ciu_descripcion', 'id_ciudad');
+    $departamentos = DB::table('departamento')->pluck('dep_descripcion', 'id_departamento');
+    $genero = array("M" => "MASCULINO", "F" => "FEMENINO", "O" => "OTROS");
 
-        $departamentos = DB::table('departamento')->pluck('dep_descripcion', 'id_departamento');
-
-        # Cargar array de sexo que serian datos
-        $genero = array("M" => "MASCULINO", "F" => "FEMENINO", "O" => "OTROS");
-
-
-        $genero2 = ["M" => "MASCULINO", "F" => "FEMENINO", "O" => "OTROS"];
-
-
-        # Retornar a la vista las variables ciudades y deparmentos
-        return view('clientes.create')
-                    ->with('ciudad', $ciudades)
-                    ->with('departamento', $departamentos)
-                    ->with('genero', $genero);
+    return view('clientes.create')
+                ->with('ciudades', $ciudades)
+                ->with('departamentos', $departamentos)
+                ->with('genero', $genero);
     }
 
     public function store(Request $request)
@@ -55,14 +48,22 @@ class ClienteController extends Controller
         $fecha = Carbon::parse($input['cli_fnac']);
         $actual = Carbon::now();
 
+        $messages = [
+            'cli_ci.required' => 'Por favor, ingrese el número de cédula.',
+            'cli_nombre.required' => 'El nombre es obligatorio.',
+            'cli_apellido.required' => 'El apellido es obligatorio.',
+            'cli_fnac.required' => 'La fecha de nacimiento es obligatoria.',
+            'cli_sexo.required' => 'Por favor, seleccione el sexo.',
+        ];
+    
         $this->validate($request, [
-            'cli_ci'   => 'required',
+            'cli_ci' => 'required',
             'cli_nombre' => 'required',
             'cli_apellido' => 'required',
             'cli_fnac' => 'required',
             'cli_sexo' => 'required',
-        ]);
-
+        ], $messages);
+    
         ##validar edad del cleinte
         $edad = $actual->diffInYears($fecha);
         if ($edad < 18) {
@@ -97,27 +98,118 @@ class ClienteController extends Controller
                 'cli_direccion' => strtoupper($input['cli_direccion']),
                 'id_departamento' => $input['id_departamento'],
                 'id_ciudad' => $input['id_ciudad'],
+                'cli_telefono' => $input['cli_telefono'],
             ]
         );
 
-        Flash::error("Cliente creado con exito..!");
+        Flash::success("Cliente creado con exito!");
         return redirect(route('clientes.index'));
     }
 
-    public function edit()
+    public function edit($id_cliente)
     {
+        // Obtener el cliente a editar
+        $cliente = DB::table('clientes')->where('id_cliente', $id_cliente)->first();
+        
+        if (empty($cliente)) {
+            Flash::error('Cliente no encontrado');
+            return redirect(route('clientes.index'));
+        }
+    
+        // Obtener las ciudades y departamentos para las listas desplegables
+        $ciudades = DB::table('ciudad')->pluck('ciu_descripcion', 'id_ciudad');
+        $departamentos = DB::table('departamento')->pluck('dep_descripcion', 'id_departamento');
+        $genero = ["M" => "MASCULINO", "F" => "FEMENINO", "O" => "OTROS"];
+    
+        // Retornar la vista de edición con los datos necesarios
+        return view('clientes.edit')
+            ->with('cliente', $cliente)
+            ->with('ciudades', $ciudades)
+            ->with('departamentos', $departamentos)
+            ->with('genero', $genero);
+    }
+    
+    public function update(Request $request, $id_cliente)
+{
+    // Validar los datos de entrada
+    $this->validate($request, [
+        'cli_ci'   => 'required|max:8',
+        'cli_nombre' => 'required',
+        'cli_apellido' => 'required',
+        'cli_fnac' => 'required|date',
+        'cli_sexo' => 'required',
+    ]);
 
+    $input = $request->all();
+
+    // Verificar si el cliente existe
+    $cliente = DB::table('clientes')->where('id_cliente', $id_cliente)->first();
+    
+    if (empty($cliente)) {
+        Flash::error('Cliente no encontrado');
+        return redirect(route('clientes.index'));
     }
 
-    public function update()
-    {
+    // Actualizar los datos del cliente
+    DB::table('clientes')->where('id_cliente', $id_cliente)->update([
+        'cli_ci' => $input['cli_ci'],
+        'cli_nombre' => strtoupper($input['cli_nombre']),
+        'cli_apellido' => strtoupper($input['cli_apellido']),
+        'cli_fnac' => $input['cli_fnac'],
+        'cli_sexo' => $input['cli_sexo'],
+        'cli_direccion' => strtoupper($input['cli_direccion']),
+        'id_departamento' => $input['id_departamento'],
+        'id_ciudad' => $input['id_ciudad'],
+        'cli_telefono' => $input['cli_telefono'],
 
+        
+    ]);
+
+    Flash::success('Cliente actualizado correctamente.');
+    return redirect(route('clientes.index'));
+}
+
+
+public function destroy($id_cliente)
+{
+    // Verificar si el cliente existe
+    $cliente = DB::table('clientes')->where('id_cliente', $id_cliente)->first();
+
+    if (empty($cliente)) {
+        Flash::error('Cliente no encontrado');
+        return redirect(route('clientes.index'));
     }
 
-    public function destroy()
-    {
+    // Eliminar el cliente
+    DB::table('clientes')->where('id_cliente', $id_cliente)->delete();
 
-    }
+    Flash::success('Cliente eliminado correctamente.');
+    return redirect(route('clientes.index'));
+}
+
+public function show ($id_cliente) {
+
+      // Obtener el cliente a editar
+      $cliente = DB::table('clientes')->where('id_cliente', $id_cliente)->first();
+        
+      if (empty($cliente)) {
+          Flash::error('Cliente no encontrado');
+          return redirect(route('clientes.index'));
+      }
+  
+      // Obtener las ciudades y departamentos para las listas desplegables
+      $ciudades = DB::table('ciudad')->pluck('ciu_descripcion', 'id_ciudad');
+      $departamentos = DB::table('departamento')->pluck('dep_descripcion', 'id_departamento');
+      $genero = ["M" => "MASCULINO", "F" => "FEMENINO", "O" => "OTROS"];
+  
+      // Retornar la vista de edición con los datos necesarios
+      return view('clientes.show')
+          ->with('cliente', $cliente)
+          ->with('ciudades', $ciudades)
+          ->with('departamentos', $departamentos)
+          ->with('genero', $genero);
+
+}
 
 
 }

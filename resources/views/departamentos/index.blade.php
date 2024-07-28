@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Clientes</h1>
+                    <h1>Departamentos</h1>
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
-                       href="{{ route('clientes.create') }}">
-                        <i class= "fa fa-plus-primary "> Agregar Nuevo Cliente </i>
+                       href="{{ route('departamento.create') }}">
+                       <i class= "fa fa-plus-primary ">Agregar Departamento</i>
                     </a>
                 </div>
             </div>
@@ -24,7 +24,7 @@
         <div class="clearfix"></div>
 
         <div class="card">
-            @include('clientes.table')
+            @include('departamentos.table')
         </div>
     </div>
 

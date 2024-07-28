@@ -10,7 +10,7 @@
                 <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
                        href="{{ route('ciudades.create') }}">
-                        Agregar Nueva Ciudad
+                       <i class= "fa fa-plus-primary "> Agregar Nueva Ciudad </i>
                     </a>
                 </div>
             </div>
