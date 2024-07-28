@@ -6,7 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1>
-                    Create Entidad Emisoras
+                    Crear Entidad Emisora
                     </h1>
                 </div>
             </div>
@@ -19,7 +19,7 @@
 
         <div class="card">
 
-            {!! Form::open(['route' => 'entidadEmisoras.store']) !!}
+            {!! Form::open(['route' => 'entidad_emisora.store']) !!}
 
             <div class="card-body">
 
@@ -31,7 +31,7 @@
 
             <div class="card-footer">
                 {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('entidadEmisoras.index') }}" class="btn btn-default"> Cancel </a>
+                <a href="{{ route('entidad_emisora.index') }}" class="btn btn-default"> Cancelar </a>
             </div>
 
             {!! Form::close() !!}

@@ -19,7 +19,10 @@
 
         <div class="card">
 
-            {!! Form::model($entidadEmisora, ['route' => ['entidadEmisoras.update', $entidadEmisora->id], 'method' => 'patch']) !!}
+            {!! Form::model($entidad_emisora,
+             ['route' => ['entidad_emisora.update', $entidad_emisora->enti_cod],
+              'method' => 'patch']) !!}
+
 
             <div class="card-body">
                 <div class="row">
@@ -29,7 +32,7 @@
 
             <div class="card-footer">
                 {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('entidadEmisoras.index') }}" class="btn btn-default"> Cancel </a>
+                <a href="{{ route('entidad_emisora.index') }}" class="btn btn-default"> Cancel </a>
             </div>
 
             {!! Form::close() !!}

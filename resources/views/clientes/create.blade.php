@@ -22,7 +22,7 @@
             {!! Form::open(['route' => 'clientes.store']) !!}
 
             <div class="card-body">
-
+                @include('flash::message')
                 <div class="row">
                     @include('clientes.fields')
                 </div>
@@ -39,3 +39,4 @@
         </div>
     </div>
 @endsection
+

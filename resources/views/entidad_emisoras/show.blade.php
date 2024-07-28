@@ -6,13 +6,12 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>
-                    @lang('models/entidadEmisoras.singular') @lang('crud.detail')
-                    </h1>
+                    @lang('Detalles')
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-default float-right"
-                       href="{{ route('entidadEmisoras.index') }}">
-                                                    @lang('crud.back')
+                       href="{{ route('entidad_emisora.index') }}">
+                                                    @lang('Atras')
                                             </a>
                 </div>
             </div>

@@ -14,11 +14,11 @@ class CiudadController extends Controller
     {
         ## la consulta que genera el codigo
         ## "select * from ciudad"
-        $ciudades = DB::table('ciudad')->get();
+        $ciudades = DB::table('ciudad')->paginate(10);
 
         ##retorna un html que se genero en resources/views
         ## la referencia carpeta punto el nombre del archivo
-        return view('ciudads.index')->with('ciudad', $ciudades);
+        return view('ciudads.index')->with('ciudades', $ciudades);
     }
     ##para la creacion de datos
     public function create()

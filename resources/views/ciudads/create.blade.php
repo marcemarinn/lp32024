@@ -1,27 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-12">
-                    <h1>
-                    Create Ciudads
-                    </h1>
-                </div>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1>
+                   Crear Nueva Ciduad
+                </h1>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <div class="content px-3">
+<div class="content px-3">
 
-        @include('adminlte-templates::common.errors')
+    @include('adminlte-templates::common.errors')
 
-        <div class="card">
+    <div class="card">
 
-            {!! Form::open(['route' => 'ciudads.store']) !!}
+        {!! Form::open(['route' => 'ciudades.store']) !!}
 
             <div class="card-body">
+
+                @include('flash::message')
 
                 <div class="row">
                     @include('ciudads.fields')
@@ -30,12 +32,13 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('ciudades.index') }}" class="btn btn-default"> Cancel </a>
+                {!! Form::submit('Grabar', ['class' => 'btn btn-primary']) !!}
+                <a href="{{ route('ciudades.index') }}" class="btn btn-default"> Cancelar </a>
             </div>
 
-            {!! Form::close() !!}
+        {!! Form::close() !!}
 
-        </div>
     </div>
+</div>
+
 @endsection
