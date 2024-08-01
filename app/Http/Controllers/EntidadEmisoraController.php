@@ -57,7 +57,7 @@ class EntidadEmisoraController extends Controller
         Flash::success('Registro creado correctamente!');
        
         ##redireccionar a la lista de ciudades una ves guardado el dato
-        return redirect(route('entidademisora.index'));
+        return redirect(route('entidad_emisoras.index'));
     }
 
     public function edit($enti_cod)
@@ -108,9 +108,21 @@ class EntidadEmisoraController extends Controller
         return redirect(route('entidad_emisora.index'));
     }
 
-    public function destroy($enti_cod)
+    public function destroy($id)
     {
+        $entidad_emisoras = DB::table('entidad_emisora')->where('enti_cod', $id)->first();
 
+        if (empty($entidad_emisoras)) {
+            Flash::error('La $entidad_emisoras no existe!');
+            return redirect(route('entidad_emisora.index'));
+        }
+
+        DB::table('entidad_emisora')->where('enti_cod', $id)->delete();
+        #DB::delete('delete from ciudad where id = ?', array('id' => $id));
+
+        Flash::success('Registro eliminado correctamente!');
+
+        return redirect(route('entidad_emisora.index'));
     }
 
 

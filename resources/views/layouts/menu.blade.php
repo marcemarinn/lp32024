@@ -35,3 +35,17 @@
         <p>Clientes</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('forma_pagos.index') }}" class="nav-link {{ Request::is('forma_pagos.index') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-user"></i>       
+        <p>Forma Pagos</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{{ route('articulos.index') }}" class="nav-link {{ Request::is('articulos.index') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-user"></i>       
+        <p>Articulos</p>
+    </a>
+</li>

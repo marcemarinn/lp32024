@@ -32,6 +32,12 @@ Route::resource('clientes', App\Http\Controllers\ClienteController::class);
 
 Route::resource('departamento', App\Http\Controllers\DepartamentoController::class);
 
+Route::resource('forma_pagos', App\Http\Controllers\FormaPagoController::class);
+
+Route::resource('articulos', App\Http\Controllers\ArticuloController::class);
+
+
+
 
 
 
