@@ -19,10 +19,7 @@
 </div>
 
 <!-- Art Imagen Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('art_imagen', 'Imagen:') !!}
-    {!! Form::file('art_imagen', null, ['class' => 'form-control']) !!}
-</div>
+
 
 <!-- Art Iva Field -->
 <div class="form-group col-sm-6">
