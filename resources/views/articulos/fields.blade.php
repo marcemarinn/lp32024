@@ -19,6 +19,15 @@
 </div>
 
 <!-- Art Imagen Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('art_imagen', 'Imagen Producto:') !!}
+    <input type="file" name="art_imagen" accept="image/*" />
+
+    @if( isset($articulo) AND $articulo->art_imagen != '' )
+        <img src="{!! asset('img/articulos/' .$articulo->art_imagen) !!}"
+             alt="image" style="max-height:50px;">
+    @endif
+</div>
 
 
 <!-- Art Iva Field -->
