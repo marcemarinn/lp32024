@@ -36,6 +36,15 @@ Route::resource('forma_pagos', App\Http\Controllers\FormaPagoController::class);
 
 Route::resource('articulos', App\Http\Controllers\ArticuloController::class);
 
+Route::resource('usuarios', App\Http\Controllers\UsuarioController::class);
+
+Route::resource('ventas', App\Http\Controllers\VentaController::class);
+
+Route::get('buscar-productos', [App\Http\Controllers\VentaController::class,'buscarProducto']);
+
+
+
+
 
 
 
