@@ -9,7 +9,18 @@ use Flash;
 
 
 class CiudadController extends Controller
+
 {
+
+
+    public function __construct( )
+    {
+         $this->middleware('auth');
+        
+         $this->middleware('auth')->only(['create', 'store']);
+         $this->middleware('auth')->except(['index']);
+        
+    }
     public function index()
     {
         ## la consulta que genera el codigo

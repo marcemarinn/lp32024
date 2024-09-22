@@ -1,52 +1,46 @@
 <!-- Name Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('name', 'Name:') !!}
+    {!! Form::label('name', 'Nombre y Apellido:') !!}
     {!! Form::text('name', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Email Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('email', 'Email:') !!}
-    {!! Form::email('email', null, ['class' => 'form-control']) !!}
+    {!! Form::label('email', 'User Name:') !!}
+    {!! Form::text('email', null, ['class' => 'form-control']) !!}
 </div>
-
-<!-- Email Verified At Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('email_verified_at', 'Email Verified At:') !!}
-    {!! Form::text('email_verified_at', null, ['class' => 'form-control','id'=>'email_verified_at']) !!}
-</div>
-
-@push('page_scripts')
-    <script type="text/javascript">
-        $('#email_verified_at').datepicker()
-    </script>
-@endpush
 
 <!-- password Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('password', 'Password:') !!}
-    {!! Form::password('password', ['class' => 'form-control']) !!}
-</div>
-
-<!-- Remember Token Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('remember_token', 'Remember Token:') !!}
-    {!! Form::text('remember_token', null, ['class' => 'form-control']) !!}
+    {!! Form::password('password', ['class' => 'form-control', 
+    'placeholder' => isset($usuario) ? 'Dejar Vacio si no se modifica.!' : 'Especifique contraseña']) !!}
 </div>
 
 <!-- Ci Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('ci', 'Ci:') !!}
+    {!! Form::label('ci', 'Nro Ci:') !!}
     {!! Form::text('ci', null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- Isactive Field -->
+<!-- Direccion Field -->
+<div class="form-group col-sm-12">
+    {!! Form::label('direccion', 'Dirección:') !!}
+    {!! Form::text('direccion', null, ['class' => 'form-control']) !!}
+</div>
+
+<!-- Roles Field -->
 <div class="form-group col-sm-6">
-    <div class="form-check">
-        {!! Form::hidden('isactive', 0, ['class' => 'form-check-input']) !!}
-        {!! Form::checkbox('isactive', '1', null, ['class' => 'form-check-input']) !!}
-        {!! Form::label('isactive', 'Isactive', ['class' => 'form-check-label']) !!}
-    </div>
+    {!! Form::label('role_id', 'Roles:') !!}
+    {!! Form::select('role_id', $roles, null,
+    ['class' => 'form-control']) !!}
+</div>
+
+<!-- Estado Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('isactive', 'Estado:') !!}
+    {!! Form::select('isactive', $isactive, (isset($usuario) ? $usuario->isactive : null), 
+    ['class' => 'form-control']) !!}
 </div>
 
 <!-- Telefono Field -->

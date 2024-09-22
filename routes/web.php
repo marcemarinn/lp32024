@@ -42,6 +42,34 @@ Route::resource('ventas', App\Http\Controllers\VentaController::class);
 
 Route::get('buscar-productos', [App\Http\Controllers\VentaController::class,'buscarProducto']);
 
+Route::resource('roles', App\Http\Controllers\RoleController::class);
+
+Route::resource('permisos', App\Http\Controllers\PermissionController::class);
+
+
+## Ruta apertura y cierre caja
+Route::resource('apertura_cierre', App\Http\Controllers\AperturaCierreController::class);
+
+## Ruta para cerrar caja y recuperar los valores
+Route::get('apertura_cierre/editCierre/{id}', [App\Http\Controllers\AperturaCierreController::class, 'editCierre']);
+
+Route::get('ventas/imprimir/factura/{idventa}',
+ [App\Http\Controllers\VentaController::class, 'imprimirFacturaeditCierre']);
+
+
+Route::get('testpdf', [App\Http\Controllers\ReporteController::class,'test']);
+
+## Rutas para reportes clientes
+Route::get('reportes/rpt_clientes', [App\Http\Controllers\ReporteController::class, 'rptClientes']);
+
+## Rutas para reportes ventas
+Route::get('reportes/rpt_ventas', [App\Http\Controllers\ReporteController::class, 'rptVentas']);
+
+Route::resource('compras', App\Http\Controllers\CompraController::class);
+
+
+
+
 
 
 

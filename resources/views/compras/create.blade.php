@@ -6,7 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1>
-                    Create Ventas
+                    Create Compras
                     </h1>
                 </div>
             </div>
@@ -19,22 +19,20 @@
 
         <div class="card">
 
-            {!! Form::open(['route' => 'ventas.store', 'class' => 'ventas-form']) !!}
+            {!! Form::open(['route' => 'compras.store']) !!}
 
             <div class="card-body">
 
-                @include('flash::message')
-
                 <div class="row">
-                    @include('ventas.fields')
+                    @include('compras.fields')
                 </div>
 
             </div>
 
-            <div class="card-footer">
-                {!! Form::submit('Grabar', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('ventas.index') }}" class="btn btn-default"> Cancelar </a>
-            </div>
+
+            
+
+         
 
             {!! Form::close() !!}
 

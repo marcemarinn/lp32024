@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "barryvdh/laravel-dompdf": "^2.2",
         "doctrine/dbal": "~2.3",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
@@ -14,7 +15,10 @@
         "infyomlabs/laravel-ui-adminlte": "^5.1",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
-        "laravel/tinker": "^2.7"
+        "laravel/tinker": "^2.7",
+        "luecano/numero-a-letras": "3.0",
+        "realrashid/sweet-alert": "^7.2",
+        "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

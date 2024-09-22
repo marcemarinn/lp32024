@@ -21,16 +21,21 @@
                         <td>{{ $value->id_ciudad }}</td>
                         <td>{{ $value->ciu_descripcion }}</td>
                         <td style="width: 120px">
+                            @can
                             {!! Form::open(['route' => ['ciudades.destroy', $value->id_ciudad], 'method' => 'delete']) !!}
+                            @Endcan
                             <div class='btn-group'>
+                                @can
                                 <a href="{{ route('ciudades.edit', [$value->id_ciudad]) }}" class='btn btn-default btn-sm'>
                                     <i class="far fa-edit"></i>
                                 </a>
+                                
                                 {!! Form::button('<i class="far fa-trash-alt"></i>', [
                                     'type' => 'submit',
                                     'class' => 'btn btn-danger btn-sm',
                                     'onclick' => "return confirm('Desea Eliminar el dato?')",
                                 ]) !!}
+                                @Endcan
                             </div>
                             {!! Form::close() !!}
                         </td>

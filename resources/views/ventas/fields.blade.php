@@ -83,7 +83,7 @@
             });
 
             /** CONSULTAR AJAX PARA LLENAR POR DEFECTO EL MODAL AL ABRIR SE CONSULTA LA URL */
-            document.getElementById('buscar').addEventListener('click', function() {
+            document.getElementById('buscar').addEventListener('click', function() { //aca me da error
                 fetch('{{ url('buscar-productos') }}?cod_suc=' + $("#cod_suc").val())
                     .then(response => response.text())
                     .then(html => {

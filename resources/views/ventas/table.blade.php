@@ -35,6 +35,13 @@
                                class='btn btn-default btn-sm'>
                                 <i class="far fa-eye"></i>
                             </a>
+
+                            <a href="{{ route('ventas/imprimir/factura', [$venta->id_venta]) }}"
+                                class='btn btn-default btn-sm'>
+                                 <i class="far fa-eye"></i>
+                             </a>
+
+
                             <a href="{{ route('ventas.edit', [$venta->id_venta]) }}"
                                class='btn btn-default btn-sm'>
                                 <i class="far fa-edit"></i>
