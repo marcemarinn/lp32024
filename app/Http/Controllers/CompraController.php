@@ -52,7 +52,7 @@ class CompraController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-
+    
         $validator = Validator::make($input, [
             'prov_id' => 'required',
             'cod_suc' => 'required',
@@ -72,22 +72,58 @@ class CompraController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
+    
         // Almacenar compra
-        DB::table('compras')->insert([
+        $compra_id = DB::table('compras')->insertGetId([
             'prov_id' => $input['prov_id'],
             'cod_suc' => $input['cod_suc'],
             'com_fecha' => $input['com_fecha'],
             'com_user_id' => auth()->user()->id,
             'com_condicion' => $input['com_condicion'],
             'com_total' => $input['com_total'],
-            'com_descripcion' => $input['com_descripcion'] ?? null, // Nueva descripción
+            'com_descripcion' => $input['com_descripcion'] ?? null,
             'com_cant_cuo' => $input['com_cat_cuo'] ?? null,
             'com_plazo' => $input['com_plazo'] ?? null,
             'com_estado' => 'Pendiente',
-
-        ]);
-
+        ], 'compra_id'); // Usar 'compra_id' como clave primaria
+    
+        // Insertar detalle_compras
+        if (!empty($input['detalle_compras'])) {
+            foreach ($input['detalle_compras'] as $detalle) {
+                DB::table('detalle_compras')->insert([
+                    'compra_id' => $compra_id,
+                    'id_articulo' => $detalle['id_articulo'],
+                    'cantidad' => $detalle['cantidad'],
+                    'precio_unit' => $detalle['precio_unit'],
+                ]);
+            }
+        }
+    
         return redirect()->route('compras.index')->with('success', 'Compra creada exitosamente.');
     }
+
+
+    public function show($id)
+    {
+        $compra = DB::table('compras')
+            ->select('compras.*', 'proveedores.prov_nombre', 'sucursal.suc_descri', 'users.name as comprador')
+            ->join('proveedores', 'proveedores.prov_id', '=', 'compras.prov_id')
+            ->join('sucursal', 'sucursal.cod_suc', '=', 'compras.cod_suc')
+            ->join('users', 'users.id', '=', 'compras.com_user_id')
+            ->where('compras.compra_id', $id)
+            ->first();
+
+        if (!$compra) {
+            return redirect()->route('compras.index')->with('error', 'Compra no encontrada.');
+        }
+
+        $detalles = DB::table('detalle_compras')
+            ->select('detalle_compras.*', 'articulos.art_descripcion')
+            ->join('articulos', 'articulos.id_articulo', '=', 'detalle_compras.id_articulo')
+            ->where('detalle_compras.compra_id', $id)
+            ->get();
+
+        return view('compras.show', compact('compra', 'detalles'));
+    }
+
 }

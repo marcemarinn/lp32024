@@ -33,10 +33,10 @@
                     <td  style="width: 120px">
                         {{-- {!! Form::open(['route' => ['compras.destroy', $compra->id], 'method' => 'delete']) !!} --}}
                         <div class='btn-group'>
-                            {{-- <a href="{{ route('compras.show', [$compra->id]) }}"
+                            <a href="{{ route('compras.show', [$compra->compra_id]) }}"
                                class='btn btn-default btn-xs'>
                                 <i class="far fa-eye"></i>
-                            </a> --}}
+                            </a>
                             {{-- <a href="{{ route('compras.edit', [$compra->id]) }}"
                                class='btn btn-default btn-xs'>
                                 <i class="far fa-edit"></i>
