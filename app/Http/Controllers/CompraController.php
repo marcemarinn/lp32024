@@ -38,15 +38,15 @@ class CompraController extends Controller
    // Función para mostrar el formulario de creación de compras
     public function create()
     {
-    $proveedores = DB::table('proveedores')->pluck('prov_nombre', 'prov_id');
-    $sucursales = DB::table('sucursal')->pluck('suc_descri', 'cod_suc');
-    $condiciones = ['CONTADO' => 'CONTADO', 'CREDITO' => 'CREDITO'];
-
-    // Obtener artículos existentes de la base de datos
-    $articulos = DB::table('articulos')->select('id_articulo', 'art_descripcion', 'art_precio')->get();
-
-    return view('compras.create', compact('proveedores', 'sucursales', 'condiciones', 'articulos'));
+   
+        $proveedores = DB::table('proveedores')->pluck('prov_nombre', 'prov_id');
+        $sucursales = DB::table('sucursal')->pluck('suc_descri', 'cod_suc');
+        $condiciones = ['CONTADO' => 'CONTADO', 'CREDITO' => 'CREDITO'];
+        $articulos = DB::table('articulos')->select('id_articulo', 'art_descripcion', 'art_precio')->get();
+    
+        return view('compras.create', compact('proveedores', 'sucursales', 'condiciones', 'articulos'));
     }
+    
 
 
     public function store(Request $request)

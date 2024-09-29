@@ -104,7 +104,8 @@ class VentaController extends Controller
             return redirect(route('ventas.index'));
         }
 
-        return view('ventas.create')->with('clientes', $clientes)
+        return view('ventas.create')
+            ->with('clientes', $clientes)
             ->with('sucursales', $sucursales)
             ->with('caja', $caja)
             ->with('condicion', $condicion);
@@ -210,6 +211,7 @@ class VentaController extends Controller
                 'nro_factura' => $input['nro_factura'],
                 'cod_suc' => $input['cod_suc'],
                 'intervalo' => $input['intervalo'],
+                'ape_nro' => $input['ape_nro'] ##guarda el id apertura
             ], 'id_venta');
 
             ## Insertar los detalles
@@ -260,7 +262,6 @@ class VentaController extends Controller
                 ##el explode convierte nuestra variable $input['nro_factura'] en un array segun el delimitador -
                 ##y accedemos a la posicion 2 porque la factura por defecto es 001-001-0000010 y el dato que necesitamos seria el 10
                 $factura = explode("-", $input['nro_factura'])[2];
-
                 ##actualizamos la tabla caja el campo caj_ult_fac
                 DB::update(
                     "UPDATE caja SET caj_ult_fac = ? where caj_cod = ?",
@@ -377,7 +378,7 @@ class VentaController extends Controller
         $ventas = DB::table('ventas')->where('id_venta', $id)->first();
 
         if (empty($ventas)) {
-            Flash::error("La venta no existe.!");
+            alert()->error('Error', 'La venta no existe.!');
             return redirect(route('ventas.index'));
         }
 
@@ -405,7 +406,7 @@ class VentaController extends Controller
             );
         }
 
-        Flash::success('La venta se ha anulado correctamente..!');
+        alert()->success('Atención', 'La venta se ha anulado correctamente..!');
         return redirect(route('ventas.index'));
     }
 
@@ -618,4 +619,34 @@ class VentaController extends Controller
             ->with('letras', $totalLetras)
             ->with('detalles', $detalle_venta);
     }
+
+    public function cobros($id_venta)
+    {
+        $ventas = DB::table('ventas')
+            ->select(
+                'ventas.*',
+                'clientes.cli_nombre',
+                'clientes.cli_apellido',
+                'clientes.cli_ci',
+                'clientes.cli_direccion',
+                'clientes.cli_telefono'
+            )
+            ->join('clientes', 'clientes.id_cliente', 'ventas.id_cliente')
+            ->where('ventas.id_venta', $id_venta)
+            ->first();
+
+        ##validar que exista la venta
+        if (empty($ventas)) {
+            alert()->error('Error', 'Registro no encontrado.!');
+
+            return redirect(route('ventas.index'));
+        }
+
+        $forma_pago = DB::table('forma_pagos')->pluck('descripcion', 'id_forma');
+
+        return view('ventas.cobros')
+            ->with('ventas', $ventas)
+            ->with('forma_pago', $forma_pago);
+    }
+
 }

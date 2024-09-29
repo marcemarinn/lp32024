@@ -13,7 +13,7 @@
         <div class="row">
             <!-- Botón para abrir el modal -->
             <div class="col-12 col-sm-12">
-                <button type="button" class="btn btn-primary" style="float: right" data-toggle="modal"
+                <button type="button" class="btn btn-primary" id="buscar" style="float: right" data-toggle="modal"
                     data-target="#productSearchModal">
                     Buscar Producto
                 </button>
@@ -24,27 +24,51 @@
                 <table class="table item-table">
                     <thead>
                         <tr>
+                            <th style="width:12%;">#</th>
                             <th style="width:35%;min-width:240px;">Producto</th>
-                            <th class="text-center" style="width:10%;">Cantidad</th>
-                            <th class="text-center">Precio Unit</th>
-                            <th class="text-center">Subtotal</th>
+                            <th class="text-center" style="width:15%;">Cantidad</th>
+                            <th class="text-center" style="width:15%;">Precio Unit</th>
+                            <th class="text-center" style="width:15%;">Subtotal</th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="selectedProducts">
+                        <!-- Los productos seleccionados se agregarán aquí --> 
 
-                    </tbody>
-                    <tfoot>
-                        {{--<tr>
-                            @if (!isset($venta))
-                                <td colspan="6">
-                                    <a href="javascript:void(0);" class='btn btn-primary btn-sm btn-add-row'>
-                                        <i class="fa fa-plus"></i> Agregar
-                                    </a>
+                        <!-- si la funcion es editar preguntamos si existe la variable $det_venta -->
+                        @if (isset($det_venta))
+                            @foreach ($det_venta as $value)
+                            <tr>
+                                <td class="text-center">
+                                    <input class="form-control text-center" type="text" name="codigo[]" readonly style="text-align: center"
+                                        value="{!! $value->id_articulo !!}">
                                 </td>
-                            @endif
-                        </tr>--}}
-                    </tfoot>
+                                <td>
+                                    <input type="text" class="form-control" name="producto[]" readonly
+                                        placeholder="Buscar productos" value="{!! $value->art_descripcion !!}">
+                                    {!! Form::hidden('id_articulo[]', $value->id_articulo) !!}
+                                    {!! Form::hidden('id_det_venta[]', $value->id_det_venta) !!}
+                                </td>
+                            
+                                <td class="text-center">
+                                    <input class="form-control text-center" type="number" min="1" name="cantidad[]" readonly
+                                        style="text-align: center" value="{!! $value->det_cantidad !!}">
+                                </td>
+                            
+                                <td class="text-center" style="width: 20%">
+                                    <input class="form-control text-center" type="text" name="precio[]" readonly
+                                        style="text-align: center" value="{!! number_format($value->det_precio_unit, 0, ',', '.') !!}">
+                                </td>
+                            
+                                <td class="text-center">
+                                    <input class="form-control text-center" type="text" name="subtotal[]" readonly
+                                        value="{!! number_format($value->det_precio_unit * $value->det_cantidad, 0, ',', '.') !!}" style="text-align: center">
+                                </td>
+                            
+                            </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
                 </table>
             </div>
         </div>

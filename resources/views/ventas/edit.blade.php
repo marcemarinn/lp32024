@@ -6,7 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <h1>
-                        Edit Venta
+                        Editar Ventas
                     </h1>
                 </div>
             </div>
@@ -19,9 +19,11 @@
 
         <div class="card">
 
-            {!! Form::model($venta, ['route' => ['ventas.update', $venta->id], 'method' => 'patch']) !!}
+            {!! Form::model($ventas, ['route' => ['ventas.update', $ventas->id_venta], 'method' => 'patch', 'class' => 'ventas-form']) !!}
 
             <div class="card-body">
+                @include('flash::message')
+
                 <div class="row">
                     @include('ventas.fields')
                 </div>
@@ -29,7 +31,7 @@
 
             <div class="card-footer">
                 {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-                <a href="{{ route('ventas.index') }}" class="btn btn-default"> Cancel </a>
+                <a href="{{ route('ventas.index') }}" class="btn btn-default"> Cancelar </a>
             </div>
 
             {!! Form::close() !!}

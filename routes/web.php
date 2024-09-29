@@ -47,6 +47,10 @@ Route::resource('roles', App\Http\Controllers\RoleController::class);
 Route::resource('permisos', App\Http\Controllers\PermissionController::class);
 
 
+## Ruta para guardar caja cerrada
+Route::get('apertura_cierre/cerrar_caja/{id}', [App\Http\Controllers\AperturaCierreController::class, 'cerrar_caja']);
+
+
 ## Ruta apertura y cierre caja
 Route::resource('apertura_cierre', App\Http\Controllers\AperturaCierreController::class);
 
@@ -65,7 +69,17 @@ Route::get('reportes/rpt_clientes', [App\Http\Controllers\ReporteController::cla
 ## Rutas para reportes ventas
 Route::get('reportes/rpt_ventas', [App\Http\Controllers\ReporteController::class, 'rptVentas']);
 
+Route::get('reportes/rpt_compras', [App\Http\Controllers\ReporteController::class, 'rptCompras']);
+
+
 Route::resource('compras', App\Http\Controllers\CompraController::class);
+
+## Rutas cobros ventas
+Route::get('ventas/cobros/factura/{id_venta}',
+[App\Http\Controllers\VentaController::class, 'cobros']);
+
+## Ruta Cobros
+Route::resource('cobros', App\Http\Controllers\CobroController::class);
 
 
 

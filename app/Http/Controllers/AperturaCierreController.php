@@ -15,29 +15,27 @@ class AperturaCierreController extends Controller
         $this->middleware('auth');
     }
 
-
     public function store(Request $request)
     {
         $input = $request->all();
-        # Realizar un replace del monto apertura para sacar el separador de miles
-        $input['monto_apertura'] = !empty($input['monto_apertura']) ?
-                                        str_replace(".", "", $input['monto_apertura']) : 0;
+        
+        // Realizar un replace del monto apertura para sacar el separador de miles
+        $input['monto_apertura'] = !empty($input['monto_apertura']) ? str_replace(".", "", $input['monto_apertura']) : 0;
 
-        # Realizar un insert en apertura
+        // Realizar un insert en apertura
         DB::insert(
-            'INSERT INTO apertura_cierre(caj_cod, user_id,
-        ape_fecha, ape_monto_inicial, ape_estado)
-        VALUES(?, ?, ?, ?, ?)',
+            'INSERT INTO apertura_cierre(caj_cod, user_id, ape_fecha, ape_monto_inicial, ape_estado)
+            VALUES(?, ?, ?, ?, ?)',
             [
                 $input['caj_cod'],
                 auth()->user()->id,
                 $input['fecha_apertura'],
-                $input['monto_apertura'], ##solo para datos numericos
+                $input['monto_apertura'], // solo para datos numéricos
                 'Abierta'
             ]
         );
 
-        alert()->success("Exito", "Apertura de caja realizado correctamente.!");
+        alert()->success("Éxito", "Apertura de caja realizada correctamente.");
         return redirect(route('ventas.index'));
     }
 
@@ -48,8 +46,8 @@ class AperturaCierreController extends Controller
             ->where('ape_estado', 'Abierta')
             ->first();
 
-        Log::info('apertura nro:::'. $nro_ape);
-        
+        Log::info('Apertura número: '. $nro_ape);
+
         if (empty($apertura_cierre)) {
             return response()->json([
                 'success' => false,
@@ -57,13 +55,12 @@ class AperturaCierreController extends Controller
             ]);
         }
 
-        # Sumamos todos los cobros de la caja del dia segun las ventas, para ello utilizamos sum()
+        // Sumar todos los cobros de la caja del día según las ventas
         $totalCobros = DB::table('cobros')
             ->join('ventas', 'ventas.id_venta', 'cobros.id_venta')
             ->where('ventas.ape_nro', $apertura_cierre->ape_nro)
             ->sum('cobros.cob_importe');
 
-        # Retorno el resultado como json
         return response()->json([
             'success' => true,
             'total'    => $totalCobros,
@@ -86,20 +83,17 @@ class AperturaCierreController extends Controller
                 ->where('ape_estado', 'Abierta')
                 ->first();
 
-
             if (empty($apertura_cierre)) {
-                alert()->error("Atención", "Registro no encontrado.!");
-
+                alert()->error("Atención", "Registro no encontrado.");
                 return redirect(route('ventas.index'));
             }
 
+            // Remover puntos del monto de cierre
             $input['monto_cierre'] = str_replace(".", "", $input['monto_cierre']);
 
+            // Actualizar la caja como cerrada
             DB::update(
-                "UPDATE apertura_cierre SET
-                ape_mon_cierre = ?,
-                ape_estado = ?
-            WHERE ape_nro = ?",
+                "UPDATE apertura_cierre SET ape_mon_cierre = ?, ape_estado = ? WHERE ape_nro = ?",
                 [
                     $input['monto_cierre'],
                     'Cerrada',
@@ -108,7 +102,7 @@ class AperturaCierreController extends Controller
             );
         }
 
-        ##consulta de caja cerrada
+        // Obtener datos de la caja cerrada
         $caja_cerrada = DB::table('apertura_cierre')->select(
             'apertura_cierre.*',
             'sucursal.suc_descri',
@@ -122,22 +116,25 @@ class AperturaCierreController extends Controller
             ->where('ape_estado', 'Cerrada')
             ->first();
 
-        $resultado_apertura = DB::table('cobro')
+        // Obtener el detalle de los cobros
+        $resultado_apertura = DB::table('cobros')
             ->select(
                 'cobros.*',
                 'forma_pagos.descripcion as forma_pago',
-                'forma_pagos.id_forma',
+                'forma_pagos.id_forma'
             )
             ->join('ventas', 'ventas.id_venta', 'cobros.id_venta')
             ->join('forma_pagos', 'forma_pagos.id_forma', 'cobros.id_forma')
-            ->join('sucursal', 'sucursal.cod_suc', 'ventas.cod_suc')
-            ->join('users', 'users.id', 'ventas.user_id')
             ->where('ventas.ape_nro', $nro_ape)
             ->get();
 
+        // Generar el PDF y pasar las variables necesarias a la vista
+        $pdf = PDF::loadView('ventas.cierre_caja_pdf', [
+            'resultado_apertura' => $resultado_apertura,
+            'caja_cerrada' => $caja_cerrada
+        ]);
 
-        $pdf = PDF::loadView('ventas.cierre_caja_pdf', compact('resultado_apertura', 'caja_cerrada'));
-
+        // Retornar el PDF
         return $pdf->stream('cierre_caja.pdf');
     }
 }

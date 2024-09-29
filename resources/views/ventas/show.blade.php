@@ -6,14 +6,12 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>
-                    @lang('models/ventas.singular') @lang('crud.detail')
+                        Nro Venta: {{ $ventas->id_venta }}
                     </h1>
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-default float-right"
-                       href="{{ route('ventas.index') }}">
-                                                    @lang('crud.back')
-                                            </a>
+                       href="{{ route('ventas.index') }}"><i class="fa fa-angle-left"></i> Atras</a>
                 </div>
             </div>
         </div>

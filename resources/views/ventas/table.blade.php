@@ -31,16 +31,24 @@
                         {!! Form::open(['route' => ['ventas.destroy', $venta->id_venta],
                         'method' => 'delete']) !!}
                         <div class='btn-group'>
+                            <!-- no mostrar boton para estados pagados -->
+                            @if($venta->ven_estado != 'PAGADO')
+                                <a href='{{ url("ventas/cobros/factura/{$venta->id_venta}") }}'
+                                    class='btn btn-warning btn-sm'>
+                                    <i class="fas fa-money-bill"></i>
+                                </a>
+                            @endif
+
+                            <a href='{{ url("ventas/imprimir/factura/{$venta->id_venta}") }}'
+                                class='btn btn-success btn-sm'
+                                title="Imprimir Factura">
+                                <i class="fas fa-print"></i>
+                            </a>
+
                             <a href="{{ route('ventas.show', [$venta->id_venta]) }}"
                                class='btn btn-default btn-sm'>
                                 <i class="far fa-eye"></i>
                             </a>
-
-                            <a href="{{ route('ventas/imprimir/factura', [$venta->id_venta]) }}"
-                                class='btn btn-default btn-sm'>
-                                 <i class="far fa-eye"></i>
-                             </a>
-
 
                             <a href="{{ route('ventas.edit', [$venta->id_venta]) }}"
                                class='btn btn-default btn-sm'>

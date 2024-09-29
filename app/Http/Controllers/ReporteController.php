@@ -16,12 +16,9 @@ class ReporteController extends Controller
 
     public function test()
     {
-        ##creamos un string con html que representa nuestro informe
         $data = '<h1>Test</h1>';
-        ##creamos un objeto pdf con loadView y pasamos nuestra variable $data
         $pdf = Pdf::loadView('reportes.pdf_test', compact('data'));
-        ##retornar pdf con una configuracion de pagina tipo de impresion
-        ##y que se hara una descarga
+
         return $pdf->download('invoice.pdf');
     }
 
@@ -29,6 +26,7 @@ class ReporteController extends Controller
     {
         ##recibir los datos enviados desde el filtro
         $input = $request->all();
+        #dd($input);
 
         ##consultar clientes
         $clientes = DB::table('clientes')
@@ -48,7 +46,7 @@ class ReporteController extends Controller
         }
         $clientes = $clientes->get();
 
-        ##recuperar todoas las ciudades para nuestro select
+        ##recuperar todoas las ciudades para nuestro select sección filtros
         $ciudad = DB::table('ciudad')->pluck('ciu_descripcion', 'id_ciudad');
 
         if (isset($input['exportar']) && $input['exportar'] == 'pdf') {
@@ -56,13 +54,15 @@ class ReporteController extends Controller
             $pdf = Pdf::loadView(
                 'reportes.pdf_clientes',
                 compact('clientes', 'ciudad')
-            );
+            )
+            ->setPaper('a4', 'landscape');## especificar tamaño de hoja y disposición
+            # de hoja landscape=horizontal, portrait=vertical
 
             ##retornar pdf con una configuracion de pagina tipo de impresion y que se hara una descarga
             return $pdf->download("ReporteClientes.pdf");
         }
 
-
+        # Cargar la vista rpt_clientes al iniciar el formulario
         return view('reportes.rpt_clientes')
             ->with('clientes', $clientes)
             ->with('ciudad', $ciudad);
@@ -70,10 +70,12 @@ class ReporteController extends Controller
 
     public function rptVentas(Request $request)
     {
+        ## Definiciones de parametros de busqueda
         $input = $request->all();
         $desde = (isset($input['desde']) && !empty($input['desde'])) ? $input['desde'] : Carbon::now()->format('Y-m-d');
         $hasta = (isset($input['hasta']) && !empty($input['hasta'])) ? $input['hasta'] : Carbon::now()->format('Y-m-d');
 
+        # Seccion de consultas
         $ventas = DB::table('ventas')->select(
             'ventas.*',
             'users.name',
@@ -86,11 +88,17 @@ class ReporteController extends Controller
             ->join('sucursal', 'sucursal.cod_suc', 'ventas.cod_suc')
             ->whereBetween('ventas.ven_fecha', [$desde, $hasta]);
 
+
+        #select * from ventas
+        #where ven_fecha between '2024-09-01' and '2024-09-16' and id_cliente =1;
+
+        # filtro de clientes
         if (!empty($input['clientes'])) {
             $ventas = $ventas->where('ventas.id_cliente', $input['clientes']);
         }
 
-        $ventas = $ventas->orderBy('id_venta', 'asc')->get();
+        # traer el array completo de ventas ordenado de manera descendente.
+        $ventas = $ventas->orderBy('id_venta', 'desc')->get();
 
         ##crear la consulta para recuperar los detalles de la venta segun los filtros
         $detalle_venta = DB::table('det_venta')->select(
@@ -105,12 +113,13 @@ class ReporteController extends Controller
             $detalle_venta = $detalle_venta->where('ventas.id_cliente', $input['cliente']);
         }
 
-        $detalle_venta = $detalle_venta->orderBy('ventas.id_venta')->get();
+        $detalle_venta = $detalle_venta->orderBy('ventas.id_venta', 'desc')->get();
 
         $detalle = [];##se define un array detalle
         if ($detalle_venta->count()) {
             foreach ($detalle_venta as $value) {
-                $detalle[$value->id_venta][] = $value;##guardamos el array de la consulta y utilizamo como key el id_venta y creamos el nuevo array detalle
+                ##guardamos el array de la consulta y utilizamo como key el id_venta y creamos el nuevo array detalle
+                $detalle[$value->id_venta][] = $value;
             }
         }
 
@@ -125,8 +134,6 @@ class ReporteController extends Controller
             return $pdf->download("ReporteVentas.pdf");
         }
 
-
-
         ##filtros cargar cliente
         $clientes = DB::table('clientes')
             ->select(DB::raw("concat(cli_nombre, ' ', cli_apellido) as cliente, id_cliente"))
@@ -139,4 +146,77 @@ class ReporteController extends Controller
             ->with('clientes', $clientes)
             ->with('detalle_venta', $detalle);
     }
-}
+
+    public function rptCompras(Request $request)
+    {
+        ## Definiciones de parámetros de búsqueda
+        $input = $request->all();
+        $desde = (isset($input['desde']) && !empty($input['desde'])) ? $input['desde'] : Carbon::now()->format('Y-m-d');
+        $hasta = (isset($input['hasta']) && !empty($input['hasta'])) ? $input['hasta'] : Carbon::now()->format('Y-m-d');
+    
+        # Sección de consultas
+        $compras = DB::table('compras')->select(
+            'compras.*',
+            'users.name',
+            'proveedores.prov_nombre',
+            'sucursal.suc_descri'
+        )
+        ->join('users', 'users.id', 'compras.com_user_id')
+        ->join('proveedores', 'proveedores.prov_id', 'compras.prov_id')
+        ->join('sucursal', 'sucursal.cod_suc', 'compras.cod_suc')
+        ->whereBetween('compras.com_fecha', [$desde, $hasta]);
+    
+        # Filtro de proveedores
+        if (!empty($input['proveedor'])) {
+            $compras = $compras->where('compras.prov_id', $input['proveedor']);
+        }
+    
+        # Traer el array completo de compras ordenado de manera descendente
+        $compras = $compras->orderBy('compra_id', 'desc')->get();
+    
+        ## Crear la consulta para recuperar los detalles de la compra según los filtros
+        $detalle_compra = DB::table('detalle_compras')->select(
+            'detalle_compras.*',
+            'articulos.art_descripcion'
+        )
+        ->join('articulos', 'articulos.id_articulo', 'detalle_compras.id_articulo')
+        ->join('compras', 'compras.compra_id', 'detalle_compras.compra_id')
+        ->whereBetween('compras.com_fecha', [$desde, $hasta]);
+    
+        if (!empty($input['proveedor'])) {
+            $detalle_compra = $detalle_compra->where('compras.prov_id', $input['proveedor']);
+        }
+    
+        $detalle_compra = $detalle_compra->orderBy('compras.compra_id', 'desc')->get();
+    
+        $detalle = []; ## Se define un array detalle
+        if ($detalle_compra->count()) {
+            foreach ($detalle_compra as $value) {
+                ## Guardamos el array de la consulta y utilizamos como key el compra_id y creamos el nuevo array detalle
+                $detalle[$value->compra_id][] = $value;
+            }
+        }
+    
+        ## Filtros para seleccionar proveedores
+        $proveedores = DB::table('proveedores')
+            ->pluck('prov_nombre', 'prov_id');  // MOVIDO AQUÍ
+    
+        if (isset($input['exportar']) && $input['exportar'] == 'pdf') {
+            ## Crear vista pdf con loadView y utilizar la vista reportes.pdf_compras para convertir en pdf
+            $pdf = PDF::loadView(
+                'reportes.pdf_compras',
+                compact('compras', 'proveedores', 'detalle')
+            );
+    
+            ## Retornar pdf con una configuración de página tipo de impresión y que se hará una descarga
+            return $pdf->download("ReporteCompras.pdf");
+        }
+    
+        return view('reportes.rpt_compras')
+            ->with('compras', $compras)
+            ->with('proveedores', $proveedores)
+            ->with('detalle_compra', $detalle)
+            ->with('desde', $desde)
+            ->with('hasta', $hasta);
+    }
+}    

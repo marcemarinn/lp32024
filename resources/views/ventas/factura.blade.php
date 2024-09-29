@@ -343,25 +343,14 @@
                 </span>
             </td>
         </tr>
-
         <tr>
-            <th><span>Total en letras </span></th>
-            <td colspan="3">
-                <span >
-                {{$letras}}    
-                </span><span>
+            <th><span>Monto Total</span></th>
+            <td>
+                <span id="prefix">Gs.</span><span>
+                {{number_format($ventas->ven_total, 0, ',', '.')}}
                 </span>
             </td>
-            <tr aria-rowspan="4">
-            <th><span>Monto Total</span></th>
-            <td colspan="3" style="text-align: right">
-                <span data-prefix>Gs.</span>
-                <span>
-                {{number_format($ventas->ven_total, 0, ',', '.')}}
-                </span>               
-            </td>
         </tr>
-
     </table>
     <table class="inventory">
         <thead>
@@ -395,12 +384,24 @@
         </tbody>
     </table>
 
-    <table class="balance">
+    <table>
+        <!-- numero a letras -->
+        <tr>
+            <th>Total en letras</th>
+            <td colspan="3">
+                <span>
+                    {{ $letras }}
+                </span>
+            </td>
+        </tr>
+        
+        <!-- total -->
         <tr aria-rowspan="4">
             <th><span>Total</span></th>
-            <td>
-                <span data-prefix>Gs.</span><span>
-                {{number_format($ventas->ven_total, 0, ',', '.')}}
+            <td colspan="3" style="text-align: right">
+                <span data-prefix>Gs.</span>
+                <span>
+                    {{number_format($ventas->ven_total, 0, ',', '.')}}
                 </span>
             </td>
         </tr>

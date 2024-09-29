@@ -18,26 +18,20 @@
         @include('adminlte-templates::common.errors')
 
         <div class="card">
-
+            <!-- Eliminamos la etiqueta <form> adicional -->
             {!! Form::open(['route' => 'ventas.store', 'class' => 'ventas-form']) !!}
-
             <div class="card-body">
-
                 @include('flash::message')
-
                 <div class="row">
                     @include('ventas.fields')
                 </div>
-
             </div>
 
             <div class="card-footer">
                 {!! Form::submit('Grabar', ['class' => 'btn btn-primary']) !!}
                 <a href="{{ route('ventas.index') }}" class="btn btn-default"> Cancelar </a>
             </div>
-
             {!! Form::close() !!}
-
         </div>
     </div>
 @endsection

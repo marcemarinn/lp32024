@@ -6,23 +6,22 @@
     </a>
 </li>
 
-
 <li class="nav-item">
     <a href="{{ route('ventas.index') }}" class="nav-link
         {{ Request::is('ventas.index') ? 'active' : '' }}">
-        <i class="fa fa-cart-plus" style="color: #63E6BE;"></i>    
+        <i class="fa fa-cart-plus"></i>
         <p>Ventas</p>
     </a>
 </li>
 
-
+@can('ciudades index')
     <li class="nav-item">
         <a href="{{ route('ciudades.index') }}" class="nav-link {{ Request::is('ciudades.index') ? 'active' : '' }}">
             <i class="nav-icon fas fa-blog"></i>
             <p>Ciudades</p>
         </a>
     </li>
-
+@endcan
 
     <li class="nav-item">
         <a href="{{ route('clientes.index') }}" class="nav-link {{ Request::is('clientes.index') ? 'active' : '' }}">
@@ -31,16 +30,7 @@
         </a>
     </li>
 
-    
-    <li class="nav-item">
-        <a href="{{ route('compras.index') }}" class="nav-link {{ Request::is('compras.index') ? 'active' : '' }}">
-            <i class="fa fa-cart-plus" style="color: #74C0FC;"></i> 
-            
-            <p>Compras</p>
-        </a>
-    </li>
 
-@can('configuraciones list')
 <li class="nav-item">
     <a href="{{ route('entidad_emisora.index') }}"
         class="nav-link {{ Request::is('entidad_emisora.index') ? 'active' : '' }}">
@@ -48,9 +38,7 @@
         <p>Entidad Emisora</p>
     </a>
 </li>
-@endcan
 
-@can('configuraciones list')
 <li class="nav-item">
     <a href="{{ route('articulos.index') }}" class="nav-link
         {{ Request::is('articulos*') ? 'active' : '' }}">
@@ -58,10 +46,19 @@
         <p> Articulos</p>
     </a>
 </li>
-@endcan
+<li class="nav-item">
+    <a href="{{ route('compras.index') }}" class="nav-link
+        {{ Request::is('compras*') ? 'active' : '' }}">
+        <i class="fab fa-amazon"></i>
+        <p> Compras</p>
+    </a>
+</li>
+
 
 <li
-    class="nav-item {{ Request::is('reportes/rpt_clientes*') || Request::is('reportes/rpt_ventas*') ? 'menu-is-opening menu-open' : '' }}">
+    class="nav-item {{ Request::is('reportes/rpt_clientes*')
+    || Request::is('reportes/rpt_ventas*')
+     ? 'menu-is-opening menu-open' : '' }}">
     <a href="#" class="nav-link {{ Request::is('reportes/rpt_clientes*') ? 'active' : '' }}">
         <i class="far fa-chart-bar"></i>
         <p>
@@ -71,12 +68,33 @@
     </a>
 
     <ul class="nav nav-treeview"
-        style="display: {{ Request::is('reportes/rpt_clientes*') || Request::is('reportes/rpt_ventas*') ? 'block;' : 'none;' }};">
+        style="display:
+        {{ Request::is('reportes/rpt_clientes*')
+        || Request::is('reportes/rpt_ventas*')
+        ? 'block;' : 'none;' }};">
 
         <li class="nav-item">
-            <a href="{{ url('reportes/rpt_clientes') }}" class="nav-link {{ Request::is('reportes/rpt_clientes*') ? 'active' : '' }}">
+            <a href="{{ url('reportes/rpt_clientes') }}"
+            class="nav-link {{ Request::is('reportes/rpt_clientes*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Reporte Clientes</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ url('reportes/rpt_ventas') }}"
+                class="nav-link {{ Request::is('reportes/rpt_ventas*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Reporte Ventas</p>
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+            <a href="{{ url('reportes/rpt_compras') }}"
+                class="nav-link {{ Request::is('reportes/rpt_compras*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Reporte Compra</p>
             </a>
         </li>
     </ul>
@@ -96,14 +114,12 @@
     <ul class="nav nav-treeview"
         style="display: {{ Request::is('permissions*') || Request::is('roles*') || Request::is('usuarios*') ? 'block;' : 'none;' }};">
 
-        @can('usuarios index')
         <li class="nav-item">
             <a href="{{ route('usuarios.index') }}" class="nav-link {{ Request::is('usuarios*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Usuarios</p>
             </a>
         </li>
-        @endcan
 
         @can('permissions index')
         <li class="nav-item">

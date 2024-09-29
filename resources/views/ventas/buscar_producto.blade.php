@@ -1,27 +1,21 @@
-<table id="selectedProducts" class="table">
+<table class="table">
     <thead>
         <tr>
             <th>Código de Producto</th>
             <th>Producto</th>
             <th>Precio</th>
-            <th>Acción</th>
         </tr>
     </thead>
     <tbody>
         @forelse($productos as $product)
-            <tr>
+            <tr onclick="seleccionarProducto('{{ $product->id_articulo }}', '{{ $product->art_descripcion }}', '{{ $product->art_precio }}')">
                 <td>{{ $product->id_articulo }}</td>
                 <td>{{ $product->art_descripcion }}</td>
-                <td>{{ $product->art_precio }}</td>
-                <td>
-                    <button type="button" class="btn btn-primary" onclick="seleccionarProducto('{{ $product->id_articulo }}', '{{ $product->art_descripcion }}', '{{ $product->art_precio }}')">
-                        Seleccionar
-                    </button>
-                </td>
+                <td>{{ number_format($product->art_precio, 0, ',', '.') }}</td>
             </tr>
         @empty
             <tr>
-                <td colspan="4">No se encontraron productos.</td>
+                <td colspan="3">No se encontraron productos.</td>
             </tr>
         @endforelse
     </tbody>
