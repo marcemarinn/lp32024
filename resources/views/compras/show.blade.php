@@ -90,14 +90,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($detalles as $detalle)
-                            <tr>
-                                <td>{{ $detalle->art_descripcion }}</td>
-                                <td class="text-center">{{ $detalle->cantidad }}</td>
-                                <td class="text-end">{{ number_format($detalle->precio_unit, 2, ',', '.') }} Gs.</td>
-                                <td class="text-end">{{ number_format($detalle->cantidad * $detalle->precio_unit, 2, ',', '.') }} Gs.</td>
-                            </tr>
-                        @endforeach
+                        <tbody>
+                            @foreach($detalles as $detalle)
+                                <tr>
+                                    <td>{{ $detalle->art_descripcion }}</td>
+                                    <td class="text-center">{{ $detalle->cantidad }}</td>
+                                    <td class="text-end">{{ number_format($detalle->precio_unit, 2, ',', '.') }} Gs.</td>
+                                    <td class="text-end">{{ number_format($detalle->cantidad * $detalle->precio_unit, 2, ',', '.') }} Gs.</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        
                     </tbody>
                     <tfoot class="table-light">
                         <tr>
@@ -111,15 +114,8 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2">
-        <a href="{{ route('compras.edit', $compra->compra_id) }}" class="btn btn-primary">
-            <i class="fas fa-edit"></i> Editar
-        </a>
-        <form action="{{ route('compras.destroy', $compra->compra_id) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar esta compra?')">
-                <i class="fas fa-trash-alt"></i> Eliminar
-            </button>
+      
+
         </form>
     </div>
 </div>

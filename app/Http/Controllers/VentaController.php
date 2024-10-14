@@ -70,30 +70,27 @@ class VentaController extends Controller
         ##verificar la ultima factura impresa para generar la siguiente
         $caja = DB::table('apertura_cierre')->select(
             DB::raw("lpad('1', 3, '0') AS establecimiento"),
+            DB::raw("lpad(cast(caja.caj_punto_expedicion as character), 3, '0') as punto_expedicion"),
             DB::raw(
-                "lpad(cast(caja.caj_punto_expedicion as character), 3, '0') as punto_expedicion"
-            ),
-            DB::raw(
-                "lpad(cast(coalesce(max(caja.caj_ult_fac), 0) + 1 as character), 7, '0')
-                    as nro_factura"
+                "lpad(cast(coalesce(NULLIF(cast(max(caja.caj_ult_fac) as text), ''), '0')::integer + 1 as text), 7, '0') as nro_factura"
             ),
             'apertura_cierre.ape_fecha',
             'apertura_cierre.ape_nro',
             'apertura_cierre.ape_estado',
             'caja.cod_suc'
         )
-            ->join('caja', 'caja.caj_cod', 'apertura_cierre.caj_cod')
-            ->where('apertura_cierre.user_id', auth()->user()->id)
-            ->where('apertura_cierre.ape_estado', 'Abierta')
-            ->groupBy(
-                'caja.caj_punto_expedicion',
-                'apertura_cierre.ape_fecha',
-                'apertura_cierre.ape_nro',
-                'apertura_cierre.ape_estado',
-                'caja.cod_suc'
-            )
-            ->first();
-
+        ->join('caja', 'caja.caj_cod', 'apertura_cierre.caj_cod')
+        ->where('apertura_cierre.user_id', auth()->user()->id)
+        ->where('apertura_cierre.ape_estado', 'Abierta')
+        ->groupBy(
+            'caja.caj_punto_expedicion',
+            'apertura_cierre.ape_fecha',
+            'apertura_cierre.ape_nro',
+            'apertura_cierre.ape_estado',
+            'caja.cod_suc'
+        )
+        ->first();
+        
         # Validamos que exista la caja y que la fecha de apertura no sea menor a la fecha actual
         if (
             !empty($caja) &&
@@ -110,6 +107,8 @@ class VentaController extends Controller
             ->with('caja', $caja)
             ->with('condicion', $condicion);
     }
+
+
 
     public function store(Request $request)
     {
@@ -622,6 +621,9 @@ class VentaController extends Controller
 
     public function cobros($id_venta)
     {
+        ## preguntar si existe una caja abierta
+        ## validacion
+
         $ventas = DB::table('ventas')
             ->select(
                 'ventas.*',

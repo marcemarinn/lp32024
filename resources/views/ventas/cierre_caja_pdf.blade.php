@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cierre de Caja</title>
+    <title>Reporte de Cuentas por Cobrar</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,34 +41,32 @@
 </head>
 <body>
     <div class="container">
-        <h1>Reporte de Cierre de Caja</h1>
+        <h1>Reporte de Cuentas por Cobrar</h1>
         
         <table>
             <thead>
                 <tr>
-                    <th>Fecha</th>
-                    <th>Transacción</th>
-                    <th>Tipo de Pago</th>
+                    <th>Cliente</th>
+                    <th>Fecha de Venta</th>
                     <th>Monto</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($transacciones as $transaccion)
+                @foreach($resultado_apertura as $cuenta)
                 <tr>
-                    <td>{{ $transaccion->fecha }}</td>
-                    <td>{{ $transaccion->descripcion }}</td>
-                    <td>{{ $transaccion->forma_pago }}</td>
-                    <td>${{ number_format($transaccion->monto, 2) }}</td>
-                </tr>
+                    <td>{{ $cuenta->cliente }}</td> 
+                    <td>{{ $cuenta->ven_fecha }}</td> 
+                    <td>${{ number_format($cuenta->cob_importe, 2) }}</td> 
                 @endforeach
             </tbody>
+            
         </table>
         
         <div class="totales">
-            <h3>Total de Ingresos: ${{ number_format($total_ingresos, 2) }}</h3>
+            <h3>Total de Cuentas por Cobrar: ${{ number_format($total_ingresos, 2) }}</h3>
         </div>
-
-        <p>Este reporte refleja el cierre de caja correspondiente al día {{ $fecha_cierre }}.</p>
+        
+        <p>Este reporte refleja las cuentas por cobrar hasta la fecha {{ now()->format('d/m/Y') }}.</p>
     </div>
 </body>
 </html>

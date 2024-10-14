@@ -195,6 +195,8 @@
         function actTotalFpa(t) {
             var error = false;
             var totalFpa = $(t).parents("tr").find('.totalFpa').val().replace(/\./g, '');
+            var totalFpa1 = $(t).parents("tr").find('.totalFpa').val();
+            console.log("Valor antes del replace: ", totalFpa1);
             // definicion de variables
             var vtot = 0;
             var totfpa = 0;
@@ -204,7 +206,8 @@
             totalFac = $("#vtot_fac").val().replace(/\./g, '');// id del elemnto
 
             // valicaion isNaN para validar valores undefined o nulos y que sea numerico
-            if (isNaN(t.value)) {
+            if (isNaN(totalFpa)) {
+                console.log("algo");
                 Swal.fire({
                     title: 'Error!',
                     text: 'Ingrese un número válido',

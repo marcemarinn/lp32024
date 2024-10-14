@@ -46,21 +46,23 @@ class UsuarioController extends Controller
 
     public function create()
     {
-        $isactive = [1 => "ACTIVO", 0 => "INACTIVO"];
+        $estado = ["ACTIVO" => "ACTIVO", "INACTIVO" => "INACTIVO"];
 
         ## Consultar roles
         $roles = DB::table('roles')->pluck('name', 'id');
 
+        # Consultar sucursal
+        $sucursal = DB::table('sucursal')->pluck('suc_descri', 'cod_suc');
+
         return view('usuarios.create')
-            ->with('isactive', $isactive)
+            ->with('estado', $estado)
+            ->with('sucursal', $sucursal)
             ->with('roles', $roles);
     }
 
     public function store(Request $request)
     {
         $input = $request->all();
-        $input['isactive'] = $input['isactive'] == 1 ? true : false;
-
 
         $validator = Validator::make(
             $input,
@@ -80,20 +82,19 @@ class UsuarioController extends Controller
         );
 
         if ($validator->fails()) {
-            Flash::error("Verificar Datos..!");
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
         $validarCi = DB::table('users')->where('ci', $input['ci'])->first();
         if (!empty($validarCi)) {
-            Flash::error('Número de Cedula Identidad ya existe.!');
+            alert()->error('Atención', 'Número de Cedula Identidad ya existe.!');
 
             return redirect(route('usuarios.create'))->withInput();
         }
 
         $validarUserName = DB::table('users')->where('email', $input['email'])->first();
         if (!empty($validarUserName)) {
-            Flash::error('El nombre de usuario ya existe.!');
+            alert()->error('Atención', 'El nombre de usuario ya existe.!');
 
             return redirect(route('usuarios.create'))->withInput();
         }
@@ -122,8 +123,9 @@ class UsuarioController extends Controller
         $user->ci = $input['ci'];
         $user->direccion = $input['direccion'];
         $user->telefono = $input['telefono'];
-        $user->isactive = $input['isactive'];
+        $user->estado = $input['estado'];
         $user->role_id = $input['role_id'];
+        $user->cod_suc = $input['cod_suc'];
         $user->save();
 
         ##capturamos el dato de role_id
@@ -152,18 +154,21 @@ class UsuarioController extends Controller
         ## Consultar roles
         $roles = DB::table('roles')->pluck('name', 'id');
 
-        $isactive = [1 => "ACTIVO", 0 => "INACTIVO"];
+        # Consultar sucursal
+        $sucursal = DB::table('sucursal')->pluck('suc_descri', 'cod_suc');
+
+        $estado = ["ACTIVO" => "ACTIVO", "INACTIVO" => "INACTIVO"];
 
         return view('usuarios.edit')
             ->with('usuario', $usuario)
             ->with('roles', $roles)
-            ->with('isactive', $isactive);
+            ->with('sucursal', $sucursal)
+            ->with('estado', $estado);
     }
 
     public function update(Request $request, $id)
     {
         $usuario = User::where('id', $id)->first();
-        
 
         if (empty($usuario)) {
             alert()->error("Atención", "El registro consultado no existe..");
@@ -172,8 +177,6 @@ class UsuarioController extends Controller
         }
 
         $input = $request->all();
-        $input['isactive'] = $input['isactive'] == 1 ? true : false;
-
 
         $validator = Validator::make(
             $input,
@@ -200,7 +203,7 @@ class UsuarioController extends Controller
             ->first();
 
         if (!empty($validarCi)) {
-            Flash::error('Número de Cedula Identidad ya existe.!');
+            alert()->error('Atención', 'Número de Cedula Identidad ya existe.!');
 
             return redirect(route('usuarios.edit', [$id]))->withInput();
         }
@@ -210,7 +213,7 @@ class UsuarioController extends Controller
             ->first();
 
         if (!empty($validarUserName)) {
-            Flash::error('El nombre de usuario ya existe.!');
+            alert()->error('Atención', 'El nombre de usuario ya existe.!');
 
             return redirect(route('usuarios.edit'[$id],))->withInput();
         }
@@ -223,7 +226,6 @@ class UsuarioController extends Controller
             // Si no ha cambiado, mantener la contraseña actual
             unset($input['password']);
         }
-
         $input['direccion'] = !empty($input['direccion']) ? strtoupper($input['direccion']) : null;
         /*DB::update(
             'update users set
@@ -256,8 +258,9 @@ class UsuarioController extends Controller
         $usuario->ci = $input['ci'];
         $usuario->direccion = $input['direccion'];
         $usuario->telefono = $input['telefono'];
-        $usuario->isactive = $input['isactive'];
+        $usuario->estado = $input['estado'];
         $usuario->role_id = $input['role_id'];
+        $usuario->cod_suc = $input['cod_suc'];
         $usuario->save();
 
         $roles = $input['role_id']; ##capturamos el dato de role_id
@@ -276,7 +279,7 @@ class UsuarioController extends Controller
         $usuario = DB::table('users')->where('id', $id)->first();
 
         if (empty($usuario)) {
-            Flash::error("El registro consultado no existe..");
+            alert()->error("Error","El registro consultado no existe..");
 
             return redirect(route('usuarios.index'));
         }
@@ -284,9 +287,49 @@ class UsuarioController extends Controller
         ## UPDATE DE ESTADO DE USUARIO
         DB::update('update users set estado = ? where id = ?', ['INACTIVO', $id]);
 
-        Flash::success("El registro se ha desactivado correctamente..");
+        alert()->success("Atención", "El registro se ha desactivado correctamente..");
 
 
         return redirect(route('usuarios.index'));
+    }
+
+    public function perfil()
+    {
+        return view('usuarios.profile');
+    }
+
+    public function cambiarPassword(Request $request)
+    {
+        $input = $request->all();
+
+        ##validar datos de contraseña utilizando validate de laravel
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'password' => 'required|min:6',
+                'confirm-password' => 'required|same:password',
+            ],
+            [
+                'password.required'         => 'La contraseña es requerida',
+                'password.min'              => 'Debe tener al menos 6 digítos la contraseña',
+                'confirm-password.required' => 'La confirmación de contraseña es requerida',
+                'confirm-password.same'     => 'Las contraseñas no coinciden',
+            ]
+        );
+
+        if ($validator->fails()) {
+
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        #Actualizar la contraseña del usuario en session
+        DB::table('users')->where('id', auth()->user()->id)
+            ->update(['password' =>  Hash::make($input['password'])]);
+
+        alert()->success('Exíto', 'Contraseña actualizada correctamente.!');
+
+        return redirect()->back();
     }
 }

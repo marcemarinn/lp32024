@@ -3,7 +3,7 @@
         <table class="table" id="compras-table">
             <thead>
             <tr>
-                <th>Descripcion</th>
+                {{-- <th>Descripcion</th> --}}
                 <th>Proveedor</th>
                 <th>Sucursal</th>
                 <th>Fecha</th>
@@ -12,7 +12,7 @@
                 <th>Total</th>
                 <th>Cuotas</th>
                 <th>Plazo</th>
-                {{-- <th>Estado</th> --}}
+                <th>Estado</th>
                 
                 <th colspan="3">Accion</th>
             </tr>
@@ -20,16 +20,16 @@
             <tbody>
             @foreach($compras as $compra)
                 <tr>
-                    <td>{{ $compra->com_descripcion }}</td>
+                    {{-- <td>{{ $compra->com_descripcion }}</td> --}}
                     <td>{{ $compra->proveedor }}</td>
                     <td>{{ $compra->sucursal }}</td>
                     <td>{{ $compra->com_fecha }}</td>
                     <td>{{ $compra->comprador }}</td>
                     <td>{{ $compra->com_condicion }}</td>
-                    <td>{{ $compra->com_total }}</td>
+                    <td>{{ number_format($compra->com_total, 0, ',', '.') }}</td>
                     <td>{{ $compra->com_cant_cuo }}</td>
                     <td>{{ $compra->com_plazo }}</td>
-                    {{-- <td>{{ $compra->com_estado }}</td> --}}
+                    <td>{{ $compra->com_estado }}</td>
                     <td  style="width: 120px">
                         {{-- {!! Form::open(['route' => ['compras.destroy', $compra->id], 'method' => 'delete']) !!} --}}
                         <div class='btn-group'>

@@ -10,7 +10,7 @@ class PermissionController extends Controller
     public function __construct()
     {
         // $this->middleware('permission:permissions index')->only('index');
-        // $this->middleware('permission:permissions Crear una nueva venta')->only('create', 'store');
+         //$this->middleware('permission:permissions Crear una nueva venta')->only('create', 'store');
         // $this->middleware('permission:permissions edit')->only('edit', 'update');
         // $this->middleware('permission:permissions destroy')->only('destroy');
         // $this->middleware('auth');
@@ -99,7 +99,19 @@ class PermissionController extends Controller
 
         alert()->success("Atención", "Registro borrado.!");
 
-        return redirect(route('permissions.index'));
+        return redirect(route('permisos.index'));
 
     }
+
+    public function show($id)
+{
+    $permission = DB::table('permissions')->where('id', $id)->first();
+
+    if (empty($permission)) {
+        alert()->error("Atención", "Registro no encontrado.");
+        return redirect(route('permisos.index'));
+    }
+
+    return view('permisos.show')->with('permission', $permission);
+}
 }

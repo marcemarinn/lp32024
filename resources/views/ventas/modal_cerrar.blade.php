@@ -5,7 +5,7 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h4 class="modal-title">Cerrar Caja </h4>
-                <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
@@ -46,7 +46,7 @@
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Cerrar</button>
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </form>
             </div>

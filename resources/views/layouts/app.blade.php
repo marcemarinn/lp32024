@@ -46,7 +46,7 @@
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
-                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                            <a href="{!! url('usuarios/detail/perfil') !!}" class="btn btn-default btn-flat">Pérfil</a>
                             <a href="#" class="btn btn-default btn-flat float-right"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 Sign out
@@ -101,15 +101,23 @@
                 });
         });
         //formato de numeros separador de miles
-        function format(input){
-            var num = input.value.replace(/\./g,'');
-            if(!isNaN(num)){
-                num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g,'$1.');
-                num = num.split('').reverse().join('').replace(/^[\.]/,'');
+        function format(input) {
+            // Eliminar puntos previos para evitar problemas con el replace
+            var num = input.value.replace(/\./g, '');
+
+            // Verificar si el valor es un número válido
+            if (!isNaN(num)) {
+                // Invertir el string y aplicar la lógica del separador de miles
+                num = num.split('').reverse().join('')  // Invertir el número
+                        .replace(/(\d{3})(?=\d)/g, '$1.') // Agregar el punto cada 3 dígitos
+                        .split('').reverse().join(''); // Volver a invertir
+
+                // Asignar el valor formateado al campo de entrada
                 input.value = num;
-            }else{
-                alert("No se un numero");
-                input.value = input.value.replace(/[^\d\.]*/g,'');
+            } else {
+                // Mostrar alerta y limpiar caracteres no numéricos
+                alert("Por favor, introduce un número válido");
+                input.value = input.value.replace(/[^\d]/g, '');  // Limpiar cualquier carácter no numérico
             }
         }
 

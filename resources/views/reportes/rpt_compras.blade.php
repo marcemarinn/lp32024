@@ -13,13 +13,11 @@
     </section>
 
     <div class="content px-3">
+
         <div class="card">
             <div class="card-body p-3">
-                <h3>Filtros</h3>
-                <div class="row">
-
-                    
-         <div class="form-group col-sm-6">
+                <div class="row">              
+                    <div class="form-group col-sm-3">
                         {!! Form::label('proveedor', 'Proveedor:') !!}
                         {!! Form::select('proveedor', $proveedores, request()->get('proveedor', null), [
                             'class' => 'form-control',
@@ -38,7 +36,7 @@
                         {!! Form::date('hasta', request()->get('hasta', null), ['class' => 'form-control', 'id' => 'hasta']) !!}
                     </div>
 
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-3">
                         <button class="btn btn-success" type="button" title="Generar Reporte" id="btn-consultar" style="margin-top:30px">
                             <i class="fas fa fa-search"></i> Buscar
                         </button>
@@ -69,20 +67,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($compras as $compra)
-                                <tr>
-                                    <td>{{ $compra->compra_id }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($compra->com_fecha)->format('d/m/Y') }}</td>
-                                    <td>{{ $compra->prov_nombre }}</td>
-                                    <td>{{ $compra->suc_descri }}</td>
-                                    <td>{{ $compra->com_condicion }}</td>
-                                    <td>{{ number_format($compra->com_total, 2) }}</td>
-                                    <td>{{ $compra->com_cant_cuo }}</td>
-                                    <td>{{ $compra->com_plazo }}</td>
-                                    <td>{{ $compra->com_estado }}</td>
-                                    <td>{{ $compra->name }}</td>
-                                </tr>
-                            @endforeach
+                           @if($compras->isEmpty())
+    <tr>
+        <td colspan="10" class="text-center">No se encontraron registros</td>
+    </tr>
+@else
+    @foreach ($compras as $compra)
+        <tr>
+            <td>{{ $compra->compra_id }}</td>
+            <td>{{ \Carbon\Carbon::parse($compra->com_fecha)->format('d/m/Y') }}</td>
+            <td>{{ $compra->prov_nombre }}</td>
+            <td>{{ $compra->suc_descri }}</td>
+            <td>{{ $compra->com_condicion }}</td>
+            <td>{{ number_format($compra->com_total, 0, ',', '.') }}</td>
+            {{-- <td>{{ number_format($compra->com_total, 2) }}</td> --}}
+            <td>{{ $compra->com_cant_cuo }}</td>
+            <td>{{ $compra->com_plazo }}</td>
+            <td>{{ $compra->com_estado }}</td>
+            <td>{{ $compra->name }}</td>
+        </tr>
+    @endforeach
+@endif
                         </tbody>
                     </table>
                 </div>

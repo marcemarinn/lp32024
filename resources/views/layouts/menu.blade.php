@@ -9,7 +9,7 @@
 <li class="nav-item">
     <a href="{{ route('ventas.index') }}" class="nav-link
         {{ Request::is('ventas.index') ? 'active' : '' }}">
-        <i class="fa fa-cart-plus"></i>
+        <i class="fa fa-cart-plus" style="color: #76fc74;"></i>
         <p>Ventas</p>
     </a>
 </li>
@@ -34,7 +34,7 @@
 <li class="nav-item">
     <a href="{{ route('entidad_emisora.index') }}"
         class="nav-link {{ Request::is('entidad_emisora.index') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-user"></i>
+        <i class="nav-icon fas fa-building"></i>
         <p>Entidad Emisora</p>
     </a>
 </li>
@@ -49,8 +49,8 @@
 <li class="nav-item">
     <a href="{{ route('compras.index') }}" class="nav-link
         {{ Request::is('compras*') ? 'active' : '' }}">
-        <i class="fab fa-amazon"></i>
-        <p> Compras</p>
+        <i class="fa fa-cart-plus" style="color: #74a1fc;"></i>
+                <p> Compras</p>
     </a>
 </li>
 
@@ -97,10 +97,11 @@
                 <p>Reporte Compra</p>
             </a>
         </li>
+
+        
     </ul>
 </li>
 
-@can('configuraciones list')
 <li
     class="nav-item {{ Request::is('permissions*') || Request::is('roles*') || Request::is('usuarios*') ? 'menu-is-opening menu-open' : '' }}">
     <a href="#" class="nav-link {{ Request::is('usuarios*') ? 'active' : '' }}">
@@ -121,25 +122,24 @@
             </a>
         </li>
 
-        @can('permissions index')
+       
         <li class="nav-item">
-            <a href="{{ route('permissions.index') }}"
+            <a href="{{ route('permisos.index') }}"
                 class="nav-link {{ Request::is('permissions*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Permisos</p>
             </a>
         </li>
-        @endcan
+       
 
-        @can('roles index')
+       
         <li class="nav-item">
             <a href="{{ route('roles.index') }}" class="nav-link {{ Request::is('roles*') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Roles</p>
             </a>
         </li>
-        @endcan
+     
 
     </ul>
 </li>
-@endcan

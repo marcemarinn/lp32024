@@ -23,6 +23,6 @@
         "sass-loader": "^8.0.0"
     },
     "dependencies": {
-        "sweetalert2": "^11.14.1"
+        "sweetalert2": "^11.14.2"
     }
 }
